@@ -1,0 +1,16 @@
+#wpcontent {
+    background: #f1f1f1;
+    min-height: 100vh;
+}
+.wrap a {
+    color: #00b9eb!important;
+}
+.hui-admin-img {
+    width: 100%;
+    text-align: center;
+}
+.hui-admin-img > img {
+    width: 100%;
+    max-width: 800px;
+    display: inline-block;
+}
