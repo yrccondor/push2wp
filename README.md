@@ -1,5 +1,7 @@
-<img src="https://img.flyhigher.top/p2w.jpg" alt="Push2WP">
+<img src="https://raw.githubusercontent.com/yrccondor/push2wp/master/img/about.jpg" alt="Push2WP">
+
 > Write, push, done.
+
 <p align="center">
 <a href="https://flyhigher.top"><img alt="Author" src="https://img.shields.io/badge/author-Axton-red.svg?style=flat-square"/></a>
 <a href="https://github.com/yrccondor/push2wp/releases"><img alt="releases" src="https://img.shields.io/github/release/yrccondor/push2wp.svg?style=flat-square"/></a>
