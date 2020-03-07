@@ -1,0 +1,157 @@
+@keyframes glitch {
+    0% {
+      transform: none;
+      opacity: 1;
+    }
+    7% {
+      transform: skew(-2.5deg, -0.9deg);
+      filter: url(#filter);
+      opacity: 0.75;
+    }
+    8% {
+      filter: none;
+    }
+    10% {
+      transform: none;
+      opacity: 1;
+    }
+    27% {
+      transform: none;
+      opacity: 1;
+    }
+    30% {
+      transform: skew(1.8deg, -0.1deg);
+      filter: url(#filter);
+      opacity: 0.75;
+    }
+    31% {
+      filter: none;
+    }
+    35% {
+      transform: none;
+      opacity: 1;
+    }
+    52% {
+      transform: none;
+      opacity: 1;
+    }
+    55% {
+      transform: skew(-1deg, 1.2deg);
+      filter: url(#filter);
+      opacity: 0.75;
+    }
+    56% {
+      filter: none;
+    }
+    60% {
+      transform: none;
+      opacity: 1;
+    }
+    72% {
+      transform: none;
+      opacity: 1;
+    }
+    75% {
+      transform: skew(0.4deg, -1deg);
+      filter: url(#filter);
+      opacity: 0.75;
+    }
+    76% {
+      filter: none;
+    }
+    80% {
+      transform: none;
+      opacity: 1;
+    }
+    100% {
+      transform: none;
+      opacity: 1;
+    }
+}
+
+#wpcontent {
+    background: #23282d;
+    min-height: calc(100vh - 32px);
+    word-break: break-all!important;
+}
+ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:after {
+    border-right-color: #23282d;
+}
+.wrap {
+    color: rgb(212, 212, 212);
+    font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
+    font-size: 16px;
+    line-height: 25px;
+    margin-top: 20px;
+    cursor: text;
+}
+.wrap::selection, .wrap *::selection {
+    background-color: rgb(212, 212, 212);
+    color: #23282d;
+}
+.wrap a {
+    color: rgb(212, 212, 212)!important;
+}
+.input-text, .input-text *, .input-choise, .input-choise * {
+    background-color: transparent!important;
+    font-size: 16px!important;
+    word-break: break-all!important;
+}
+.input-text, .input-choise {
+    border: none!important;
+    -moz-appearance: none!important;
+    -webkit-appearance: none!important;
+    outline: 0!important;
+    box-sizing: border-box!important;
+    padding-left: 10px;
+}
+.input-choise, #output-choise {
+    display: none;
+}
+.printed-command {
+    padding-left: 10px;
+}
+.color-err {
+    font-weight: bold;
+    color: crimson;
+}
+.color-info {
+    font-weight: bold;
+    color: dodgerblue;
+}
+.color-warn {
+    font-weight: bold;
+    color: goldenrod;
+}
+#output {
+    word-break: break-all;
+}
+#wpbody-content {
+    padding-bottom: 35px!important;
+}
+.ascii {
+    white-space: pre;
+    line-height: 18px;
+    padding-bottom: 25px;
+    width: 100%;
+    overflow: auto;
+}
+#wpcontent.ptw-rm {
+    animation: glitch .5s 2;
+}
+body {
+    overflow-x: hidden!important;
+}
+@media(max-width: 782px){
+    #wpcontent {
+        min-height: calc(100vh - 46px);
+    }
+    #wpbody-content {
+        padding-bottom: 20px!important;
+    }
+}
+@media(max-width: 600px){
+    #wpcontent {
+        min-height: 100vh;
+    }
+}

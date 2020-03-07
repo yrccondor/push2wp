@@ -3,6 +3,7 @@
 Plugin Name: Push2WP
 Plugin URI: https://ptw.flyhigher.top
 Version: 1.0.0
+Description: Write, push, done.
 Author: Axton
 Author URI: https://flyhigher.top
 License: MIT

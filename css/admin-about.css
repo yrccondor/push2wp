@@ -1,16 +1,46 @@
 #wpcontent {
-    background: #f1f1f1;
-    min-height: 100vh;
+    background: #23282d;
+    min-height: calc(100vh - 32px);
+    word-break: break-all!important;
+}
+ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:after {
+    border-right-color: #23282d;
+}
+.wrap {
+    color: rgb(212, 212, 212);
+    font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
+    font-size: 16px;
+    line-height: 25px;
+    margin-top: 20px;
+    cursor: text;
+}
+.wrap::selection, .wrap *::selection {
+    background-color: rgb(212, 212, 212);
+    color: #23282d;
 }
 .wrap a {
-    color: #00b9eb!important;
+    color: rgb(212, 212, 212)!important;
 }
-.hui-admin-img {
-    width: 100%;
-    text-align: center;
+#wpbody-content {
+    padding-bottom: 35px!important;
 }
-.hui-admin-img > img {
+.ascii {
+    white-space: pre;
+    line-height: 18px;
+    padding-bottom: 25px;
     width: 100%;
-    max-width: 800px;
-    display: inline-block;
+    overflow: auto;
+}
+@media(max-width: 782px){
+    #wpcontent {
+        min-height: calc(100vh - 46px);
+    }
+    #wpbody-content {
+        padding-bottom: 20px!important;
+    }
+}
+@media(max-width: 600px){
+    #wpcontent {
+        min-height: 100vh;
+    }
 }
