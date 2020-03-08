@@ -26,7 +26,7 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 }
 .ascii {
     white-space: pre;
-    line-height: 18px;
+    line-height: 20px;
     padding-bottom: 25px;
     width: 100%;
     overflow: auto;

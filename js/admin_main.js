@@ -1,5 +1,5 @@
 let shellVersion = "0.1.0";
-let commandList = ["create", "list", "clear", "help", "remove", "pause"];
+let commandList = ["create", "list", "clear", "help", "remove", "log", "pause"];
 let createArgList = ["github", "gitlab", "coding"];
 let mode = "normal";
 let guessedCommand = "";
@@ -10,6 +10,8 @@ let filteredHistory = [];
 let historyCursor = -1;
 let nowInput = null;
 let historyMode = false;
+let filteredCommand = [];
+filteredSuggestion = [];
 if(sessionStorage.getItem("ptw_history")){
     history = JSON.parse(sessionStorage.getItem("ptw_history"));
 }
@@ -24,7 +26,11 @@ jQuery("#input").click(function(){
 })
 
 jQuery(".input-text").on("input", function(){
-    filterHistory(jQuery(".input-text").text());
+    let rawInput = jQuery(".input-text").text();
+    jQuery(".input-text").text(rawInput);
+    keepLastIndex(document.getElementsByClassName("input-text")[0]);
+    filterHistory(rawInput);
+    filterCommand(rawInput);
 })
 
 function filterHistory(input){
@@ -36,7 +42,33 @@ function filterHistory(input){
                 filteredHistory.push(item);
             }
         }
-        console.log(filteredHistory);
+    }
+}
+
+function filterCommand(input){
+    filteredCommand = [];
+    filteredSuggestion = [];
+    input = input.split(/\|\||;|&&/).pop().trim();
+    let splitedInput = input.split(" ");
+    if(splitedInput.length === 1){
+        for(item of commandList){
+            if(item.indexOf(input) === 0){
+                filteredCommand.push(item);
+                filteredSuggestion.push(item.substr(input.length));
+            }
+        }
+    }else{
+        for(item of createArgList){
+            if(item.indexOf(splitedInput[splitedInput.length - 1]) === 0){
+                filteredCommand.push(item);
+                filteredSuggestion.push(item.substr(splitedInput[splitedInput.length - 1].length));
+            }
+        }
+    }
+    if(input !== ""){
+        jQuery("#tip").text(filteredSuggestion[0] || "");
+    }else{
+        jQuery("#tip").text("");
     }
 }
 
@@ -55,10 +87,11 @@ function prsKey(event) {
         event.preventDefault();
         nowInput = null;
         historyMode = false;
+        jQuery("#tip").text("");
         if(mode === "guess"){
-            doCommand(jQuery(".input-choise").text());
+            doCommand(jQuery(".input-choise").text().trim());
         }else{
-            let rawCommand = jQuery(".input-text").text();
+            let rawCommand = jQuery(".input-text").text().trim();
             outputHead(rawCommand);
             if(rawCommand !== ""){
                 addHistory(rawCommand);
@@ -79,14 +112,28 @@ function prsKey(event) {
                 commandQueue.push(0);
             }
             commandQueue.pop();
-            console.log(commandQueue);
             doCommand(commandQueue.shift());
         }
         jQuery('.input-text').html('');
-        filterHistory(jQuery(".input-text").text());
+        filterHistory(jQuery(".input-text").text().trim());
         jQuery('body,html').animate({
             scrollTop: jQuery(document).height()
         }, 0);
+    }else if(event.keyCode === 9){
+        event.preventDefault();
+        nowInput = null;
+        historyMode = false;
+        filterHistory(jQuery(".input-text").text().trim());
+        if(filteredCommand.length === 1){
+            let splitedInput = jQuery(".input-text").text().trim().split(" ");
+            splitedInput.pop();
+            splitedInput.push(filteredCommand[0]);
+            jQuery(".input-text").html(splitedInput.join(" ") + "&nbsp;");
+            filterCommand(jQuery('.input-text').text().trim());
+            keepLastIndex(document.getElementsByClassName("input-text")[0]);
+        }else{
+            //
+        }
     }else if(event.keyCode === 38){
         event.preventDefault();
         if(!historyMode){
@@ -97,6 +144,18 @@ function prsKey(event) {
             hisComm('up');
         }else{
             $('.input-choise').text($('.input-choise').text() + "^[[A");
+        }
+        filterCommand(jQuery('.input-text').text());
+    }else if(event.keyCode === 39){
+        nowInput = null;
+        historyMode = false;
+        filterHistory(jQuery(".input-text").text().trim());
+        if(getCursorPosition(document.getElementsByClassName("input-text")[0]) === jQuery(".input-text").text().length){
+            if(jQuery("#tip").text() !== ""){
+                jQuery(".input-text").html(jQuery(".input-text").text().trim() + jQuery("#tip").text() + "&nbsp;");
+                jQuery("#tip").text("");
+            }
+            keepLastIndex(document.getElementsByClassName("input-text")[0])
         }
     }else if(event.keyCode === 40){
         event.preventDefault();
@@ -109,10 +168,11 @@ function prsKey(event) {
         }else{
             $('.input-choise').text($('.input-choise').text() + "^[[B");
         }
+        filterCommand(jQuery('.input-text').text().trim());
     }else{
         nowInput = null;
         historyMode = false;
-        filterHistory(jQuery(".input-text").text());
+        filterHistory(jQuery(".input-text").text().trim());
     }
 }
 
@@ -209,7 +269,7 @@ function doCommand(command){
         return;
     }
     if(command !== ""){
-        if(command === "rm -rf /" || command === "rm -rf /*"){
+        if((command + " ").indexOf("rm -rf / ") === 0 || (command + " ").indexOf("rm -rf /* ") === 0){
             jQuery("#wpcontent").addClass("ptw-rm");
             setTimeout(()=>{
                 jQuery("#wpcontent").removeClass("ptw-rm");
@@ -224,7 +284,7 @@ function doCommand(command){
             if(commmandSequence.length > 1){
                 output('<span class="color-warn">'+phpContent["warning"]+':</span> '+phpContent["ignored"]);
             }
-            outputArg = ["Push2WP Verion "+phpContent["version"]+"<br>PTW Shell Verion "+shellVersion+"<br><br>&nbsp;&nbsp;<strong>create &lt;github/gitlab/coding&gt;</strong>: "+phpContent["help"]["create"]+"<br>&nbsp;&nbsp;<strong>list</strong>: "+phpContent["help"]["list"]+"<br>&nbsp;&nbsp;<strong>remove &lt;id&gt;</strong>: "+phpContent["help"]["remove"]+"<br>&nbsp;&nbsp;<strong>pause</strong>: "+phpContent["help"]["pause"]+"<br>&nbsp;&nbsp;<strong>clear</strong>: "+phpContent["help"]["clear"]+"<br>&nbsp;&nbsp;<strong>help</strong>: "+phpContent["help"]["help"]+"<br>"];
+            outputArg = ["Push2WP Verion "+phpContent["version"]+"<br>PTW Shell Verion "+shellVersion+"<br><br>&nbsp;&nbsp;<strong>create &lt;github/gitlab/coding&gt;</strong>: "+phpContent["help"]["create"]+"<br>&nbsp;&nbsp;<strong>list</strong>: "+phpContent["help"]["list"]+"<br>&nbsp;&nbsp;<strong>remove &lt;id&gt;</strong>: "+phpContent["help"]["remove"]+"<br>&nbsp;&nbsp;<strong>pause</strong>: "+phpContent["help"]["pause"]+"<br>&nbsp;&nbsp;<strong>log</strong>: "+phpContent["help"]["log"]+"<br>&nbsp;&nbsp;<strong>clear</strong>: "+phpContent["help"]["clear"]+"<br>&nbsp;&nbsp;<strong>help</strong>: "+phpContent["help"]["help"]+"<br>"];
             status = true;
         }else if(commmandSequence[0] === "clear"){
             jQuery("#output").html("");
@@ -352,6 +412,24 @@ function keepLastIndex(obj) {
         range.collapse(false);
         range.select()
     }
+}
+
+function getCursorPosition(element){
+    let caretOffset = 0;
+    let doc = element.ownerDocument || element.document;
+    let win = doc.defaultView || doc.parentWindow;
+    let sel;
+    if (typeof win.getSelection != "undefined") {
+        sel = win.getSelection();
+        if (sel.rangeCount > 0) {
+            let range = win.getSelection().getRangeAt(0);
+            let preCaretRange = range.cloneRange();
+            preCaretRange.selectNodeContents(element);
+            preCaretRange.setEnd(range.endContainer, range.endOffset);
+            caretOffset = preCaretRange.toString().length
+        }
+    }
+    return caretOffset
 }
 
 function createHook(source){
