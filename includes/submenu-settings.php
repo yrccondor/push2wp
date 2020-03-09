@@ -1,3 +1,9 @@
+<?php
+/**
+ * Settings page
+ * @author Axton
+ */
+?>
 <div class="wrap">
 <div class="ascii"> _____           _     _____          _______  
 |  __ \         | |   |__ | |        | |  __ \ 
@@ -24,7 +30,7 @@
         },
         "warning": "<?php _e("Warning", "ptw");?>",
         "error": "<?php _e("Error", "ptw");?>",
-        "unknow_command": ["<?php _e("unknown command '", "ptw");?>", "<?php _e("'. Please check your input.", "ptw");?>"],
+        "unknown_command": ["<?php _e("unknown command '", "ptw");?>", "<?php _e("'. Please check your input.", "ptw");?>"],
         "unknow_create": "<?php _e("unknown source or blank source. You can only choose github/gitlab/coding as your source.", "ptw");?>",
         "do_you_mean": ["<?php _e("Do you mean", "ptw");?>", "<?php _e("?", "ptw");?>"],
         "ignored": "<?php _e("redundant args ignored.", "ptw");?>",

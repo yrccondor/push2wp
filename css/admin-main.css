@@ -1,3 +1,9 @@
+/**
+ * Style sheet for settings page
+ * @author Axton
+ */
+
+/*----- keyframes -----*/
 @keyframes glitch {
     0% {
       transform: none;
@@ -68,15 +74,33 @@
       opacity: 1;
     }
 }
-
+/*----- body -----*/
+body {
+  overflow-x: hidden!important;
+}
+.ascii {
+    white-space: pre;
+    line-height: 20px;
+    padding-bottom: 25px;
+    width: 100%;
+    overflow: auto;
+}
+ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:after {
+    border-right-color: #23282d;
+}
+/*----- #wpcontent -----*/
 #wpcontent {
     background: #23282d;
     min-height: calc(100vh - 32px);
     word-break: break-all!important;
 }
-ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:after {
-    border-right-color: #23282d;
+#wpbody-content {
+    padding-bottom: 35px!important;
 }
+#wpcontent.ptw-rm {
+    animation: glitch .5s 2;
+}
+/*----- .warp -----*/
 .wrap {
     color: rgb(212, 212, 212);
     font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
@@ -92,6 +116,7 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 .wrap a {
     color: rgb(212, 212, 212)!important;
 }
+/*----- inputs -----*/
 .input-text, .input-text *, .input-choise, .input-choise * {
     background-color: transparent!important;
     font-size: 16px!important;
@@ -108,9 +133,18 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 .input-choise, #output-choise {
     display: none;
 }
-.printed-command {
-    padding-left: 10px;
+.input-text * {
+  display: inline!important;
+  white-space: pre-wrap!important;
 }
+.input-text, .input-text * {
+  background-color: transparent!important;
+  font-size: 16px!important;
+  font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
+  word-break: break-all!important;
+  color: rgb(212, 212, 212)!important;
+}
+/*----- output -----*/
 .color-err {
     font-weight: bold;
     color: crimson;
@@ -123,31 +157,20 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
     font-weight: bold;
     color: goldenrod;
 }
+.printed-command {
+    padding-left: 10px;
+}
 #output {
     word-break: break-all;
-}
-#wpbody-content {
-    padding-bottom: 35px!important;
-}
-.ascii {
-    white-space: pre;
-    line-height: 20px;
-    padding-bottom: 25px;
-    width: 100%;
-    overflow: auto;
-}
-#wpcontent.ptw-rm {
-    animation: glitch .5s 2;
-}
-body {
-    overflow-x: hidden!important;
-}
-#filter-svg {
-  display: none;
 }
 #tip {
   opacity: .35;
 }
+/*----- svg -----*/
+#filter-svg {
+  display: none;
+}
+/*----- media query -----*/
 @media(max-width: 782px){
     #wpcontent {
         min-height: calc(100vh - 46px);

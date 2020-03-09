@@ -1,3 +1,9 @@
+<?php
+/**
+ * About page
+ * @author Axton
+ */
+?>
 <div class="wrap">
 <div class="ascii"> _____           _     _____          _______  
 |  __ \         | |   |__ | |        | |  __ \ 

@@ -1,11 +1,29 @@
+/**
+ * Style sheet for about page
+ * @author Axton
+ */
+
+/*----- body -----*/
+ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:after {
+    border-right-color: #23282d;
+}
+.ascii {
+    white-space: pre;
+    line-height: 20px;
+    padding-bottom: 25px;
+    width: 100%;
+    overflow: auto;
+}
+/*----- #wpcontent -----*/
 #wpcontent {
     background: #23282d;
     min-height: calc(100vh - 32px);
     word-break: break-all!important;
 }
-ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:after {
-    border-right-color: #23282d;
+#wpbody-content {
+    padding-bottom: 35px!important;
 }
+/*----- .warp -----*/
 .wrap {
     color: rgb(212, 212, 212);
     font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
@@ -21,16 +39,7 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 .wrap a {
     color: rgb(212, 212, 212)!important;
 }
-#wpbody-content {
-    padding-bottom: 35px!important;
-}
-.ascii {
-    white-space: pre;
-    line-height: 20px;
-    padding-bottom: 25px;
-    width: 100%;
-    overflow: auto;
-}
+/*----- media query -----*/
 @media(max-width: 782px){
     #wpcontent {
         min-height: calc(100vh - 46px);
