@@ -103,7 +103,7 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 /*----- .warp -----*/
 .wrap {
     color: rgb(212, 212, 212);
-    font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
+    font-family: 'Courier Prime',Courier New,Consolas, monospace!important;
     font-size: 16px;
     line-height: 25px;
     margin-top: 20px;
@@ -134,15 +134,23 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
     display: none;
 }
 .input-text * {
-  display: inline!important;
-  white-space: pre-wrap!important;
+    display: inline!important;
+    white-space: pre-wrap!important;
 }
 .input-text, .input-text * {
-  background-color: transparent!important;
-  font-size: 16px!important;
-  font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
-  word-break: break-all!important;
-  color: rgb(212, 212, 212)!important;
+    background-color: transparent!important;
+    font-size: 16px!important;
+    font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
+    word-break: break-all!important;
+    color: rgb(212, 212, 212)!important;
+}
+.input-text br {
+    display: none!important;
+}
+.webhook-list {
+    white-space: pre;
+    width: 100%;
+    overflow: auto;
 }
 /*----- output -----*/
 .color-err {
@@ -157,6 +165,10 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
     font-weight: bold;
     color: goldenrod;
 }
+.color-success {
+    font-weight: bold;
+    color: chartreuse;
+}
 .printed-command {
     padding-left: 10px;
 }
@@ -164,11 +176,15 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
     word-break: break-all;
 }
 #tip {
-  opacity: .35;
+    opacity: .35;
+}
+.tab-items {
+    width: 76.85px;
+    display: inline-block;
 }
 /*----- svg -----*/
 #filter-svg {
-  display: none;
+    display: none;
 }
 /*----- media query -----*/
 @media(max-width: 782px){

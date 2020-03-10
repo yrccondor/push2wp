@@ -1,0 +1,141 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: push2wp\n"
+"POT-Creation-Date: 2020-03-10 23:28+0800\n"
+"PO-Revision-Date: 2020-03-10 23:42+0800\n"
+"Last-Translator: \n"
+"Language-Team: axtonyao@gmail.com\n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/submenu-about.php:15
+msgid "Push2WP helps you publish and manage your posts in a geeker way."
+msgstr "Push2WP 帮助你以更极客的方式发布和管理你的文章。"
+
+#: includes/submenu-about.php:16
+msgid ""
+"Made with love by <a href=\"https://flyhigher.top\" target=\"_blank\">Axton</"
+"a>."
+msgstr ""
+"由 <a href=\"https://flyhigher.top\" target=\"_blank\">Axton</a> 用爱开发。"
+
+#: includes/submenu-about.php:17
+msgid ""
+"Push2WP on GitHub: <a href=\"https://github.com/yrccondor/push2wp\" target="
+"\"_blank\">https://github.com/yrccondor/push2wp</a>."
+msgstr ""
+"Push2WP 的 GitHub 存储库：<a href=\"https://github.com/yrccondor/push2wp\" "
+"target=\"_blank\">https://github.com/yrccondor/push2wp</a>。"
+
+#: includes/submenu-about.php:19
+msgid "**<strong>This project be dedicated to YangY.</strong>**"
+msgstr "**<strong>这个项目献给 YangY</strong>**"
+
+#: includes/submenu-settings.php:14
+msgid ""
+"Welcome. You can use CLI to manage your Push2WP settings. Trust me, this is "
+"way more efficient than using GUI.<br>Type '<strong>help</strong>' to get "
+"help.<br>For more information, go to <a href=\"https://doc.flyhigher.top/"
+"push2wp/\" target=\"_blank\">documentation</a>."
+msgstr ""
+"欢迎。你可以使用命令行来管理 Push2WP。相信我，这会比图形界面高效得多。<br>输"
+"入 '<strong>help</strong>' 以获取帮助。<br>更多信息请参阅 <a href=\"https://"
+"doc.flyhigher.top/push2wp/\" target=\"_blank\">文档</a>。"
+
+#: includes/submenu-settings.php:23
+msgid "creat a new webhook"
+msgstr "创建一个新的 webhook"
+
+#: includes/submenu-settings.php:24
+msgid "list all webhooks"
+msgstr "列出所有 webhook"
+
+#: includes/submenu-settings.php:25
+msgid "remove a webhook by id"
+msgstr "根据 id 删除 webhook"
+
+#: includes/submenu-settings.php:26
+msgid "pause/continue to response to webhooks"
+msgstr "暂停/继续响应 webhoook"
+
+#: includes/submenu-settings.php:27
+msgid "print latest 50 logs"
+msgstr "打印最近 50 条日志"
+
+#: includes/submenu-settings.php:28
+msgid "clear the screen"
+msgstr "清除屏幕"
+
+#: includes/submenu-settings.php:29
+msgid "display this help"
+msgstr "显示这个帮助"
+
+#: includes/submenu-settings.php:32
+msgid "An ID is needed. Please check your input."
+msgstr "ID 是必须的。请检查你的输入。"
+
+#: includes/submenu-settings.php:33
+msgid ""
+"Your input for ID is not an integer or too long. Please check your input."
+msgstr "你输入的 ID 不是一个整数或是太长。请检查你的输入。"
+
+#: includes/submenu-settings.php:34
+msgid "The webhook below has been removed successfully."
+msgstr "下面的 webhook 已经被成功删除。"
+
+#: includes/submenu-settings.php:36
+msgid "Warning"
+msgstr "警告"
+
+#: includes/submenu-settings.php:37
+msgid "Error"
+msgstr "错误"
+
+#: includes/submenu-settings.php:38
+msgid "Done"
+msgstr "完成"
+
+#: includes/submenu-settings.php:39
+msgid "unknown command '"
+msgstr "未知命令 '"
+
+#: includes/submenu-settings.php:39
+msgid "'. Please check your input."
+msgstr "'。请检查你的输入。"
+
+#: includes/submenu-settings.php:40
+msgid ""
+"unknown source or blank source. You can only choose github/gitlab/coding as "
+"your source."
+msgstr "未知源或未指定源。你只能指定源为 github/gitlab/coding。"
+
+#: includes/submenu-settings.php:41
+msgid "Do you mean"
+msgstr "你是要输入"
+
+#: includes/submenu-settings.php:41
+msgid "?"
+msgstr "吗？"
+
+#: includes/submenu-settings.php:42
+msgid "redundant args ignored."
+msgstr "多余参数已忽略。"
+
+#: includes/submenu-settings.php:43
+msgid "syntax error."
+msgstr "语法错误。"
+
+#: ptw-menus.php:11
+msgid "Settings"
+msgstr "设置"
+
+#: ptw-menus.php:12
+msgid "About"
+msgstr "关于"

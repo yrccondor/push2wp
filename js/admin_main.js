@@ -16,6 +16,7 @@ let filteredHistory = [];
 let historyCursor = -1;
 let nowInput = null;
 let historyMode = false;
+let tabMode = false;
 let filteredCommand = [];
 let filteredSuggestion = [];
 
@@ -85,7 +86,7 @@ function filterCommand(input){
                 filteredSuggestion.push(item.substr(input.length));
             }
         }
-    }else if(splitedInput[0] === "create"){
+    }else{
         // Filter out commands just for 'create' command
         for(item of createArgList){
             if(item.indexOf(splitedInput[splitedInput.length - 1]) === 0){
@@ -95,7 +96,7 @@ function filterCommand(input){
         }
     }
 
-    // Display the first suggestion following the input
+    // Display the first suggestion below the input
     if(input !== ""){
         jQuery("#tip").text(filteredSuggestion[0] || "");
     }else{
@@ -134,17 +135,20 @@ function parseKey(event) {
         event.preventDefault();
         nowInput = null;
         historyMode = false;
+        tabMode = false;
         jQuery("#tip").text("");
         // Whether asking for choice
         if(mode === "guess"){
             doCommand(jQuery(".input-choise").text().replace(/\u00A0/g, " ").trim());
         }else{
-            let rawCommand = jQuery(".input-text").text().replace(/\u00A0/g, " ").trim();
+            // Combine multiple SPACE to single SPACE
+            let rawCommand = jQuery(".input-text").text().replace(/\u00A0/g, " ").replace(/\u0020+/g, " ");
 
             // Print inputed command
-            outputHead(rawCommand);
-            if(rawCommand !== ""){
-                addHistory(rawCommand);
+            let keptSpaceInput = jQuery(".input-text").text();
+            outputHead(keptSpaceInput);
+            if(jQuery(".input-text").text() !== ""){
+                addHistory(keptSpaceInput);
             }
 
             // Split the input into sigle commands
@@ -167,12 +171,13 @@ function parseKey(event) {
                 commandQueue.push(0);
             }
             commandQueue.pop();
+            console.log(commandQueue);
             doCommand(commandQueue.shift());
         }
 
         // Clear the input area
         jQuery('.input-text').html('');
-        filterHistory(jQuery(".input-text").text().replace(/\u00A0/g, " ").trim());
+        filterHistory(jQuery(".input-text").text().replace(/\u00A0/g, " "));
 
         // Keep the scroll bar in the end
         jQuery('body,html').animate({
@@ -183,21 +188,37 @@ function parseKey(event) {
         event.preventDefault();
         nowInput = null;
         historyMode = false;
-        filterHistory(jQuery(".input-text").text().replace(/\u00A0/g, " ").trim());
+        filterHistory(jQuery(".input-text").text().replace(/\u00A0/g, " "));
+        filterCommand(jQuery(".input-text").text().replace(/\u00A0/g, " "));
         if(filteredCommand.length === 1){
             // When there is only one suggestion, just apply
-            let splitedInput = jQuery(".input-text").text().replace(/\u00A0/g, " ").trim().split(" ");
-            splitedInput.pop();
-            splitedInput.push(filteredCommand[0]);
-            jQuery(".input-text").html(splitedInput.join(" ") + "&nbsp;");
+            let input = jQuery(".input-text").text()
+            let splitedInput = input.replace(/\u00A0/g, " ").trim().split(" ");
+            let lastInput = splitedInput.pop();
+            jQuery(".input-text").html(input.substr(0, input.length - lastInput.length) + filteredCommand[0] + "&nbsp;");
             filterCommand(jQuery(".input-text").text().replace(/\u00A0/g, " "));
             keepLastIndex(document.getElementsByClassName("input-text")[0]);
         }else{
-            // When there are more then one suggestions, print choices
+            // When there are more then one suggestion, print choices
+            if(filteredCommand.length >= 2){
+                if(!tabMode){
+                    tabMode = true;
+                }else{
+                    outputHead(jQuery(".input-text").text());
+                    let outputHTML = "";
+                    for(item of filteredCommand){
+                        outputHTML += "<div class=\"tab-items\">"+item+"</div>";
+                    }
+                    outputHTML += "<br>";
+                    output(outputHTML, "");
+                    tabMode = false;
+                }
+            }
         }
     }else if(event.keyCode === 38){
         // UP
         event.preventDefault();
+        tabMode = false;
         if(!historyMode){
             nowInput = jQuery(".input-text").text().replace(/\u00A0/g, " ");
             historyMode = true;
@@ -214,12 +235,13 @@ function parseKey(event) {
         // RIGHT
         nowInput = null;
         historyMode = false;
-        filterHistory(jQuery(".input-text").text().replace(/\u00A0/g, " ").trim());
+        tabMode = false;
+        filterHistory(jQuery(".input-text").text().replace(/\u00A0/g, " "));
 
         // If it has been pressed when the cursor is in the end, apply the suggestion
         if(getCursorPosition(document.getElementsByClassName("input-text")[0]) === jQuery(".input-text").text().replace(/\u00A0/g, " ").length){
             if(jQuery("#tip").text() !== ""){
-                jQuery(".input-text").html(jQuery(".input-text").text().replace(/\u00A0/g, " ") + jQuery("#tip").text() + "&nbsp;");
+                jQuery(".input-text").html(jQuery(".input-text").text() + jQuery("#tip").text() + "&nbsp;");
                 jQuery("#tip").text("");
             }
             filterCommand(jQuery(".input-text").text().replace(/\u00A0/g, " "));
@@ -228,6 +250,7 @@ function parseKey(event) {
     }else if(event.keyCode === 40){
         // DOWN
         event.preventDefault();
+        tabMode = false;
         if(!historyMode){
             nowInput = jQuery(".input-text").text().replace(/\u00A0/g, " ");
             historyMode = true;
@@ -240,10 +263,29 @@ function parseKey(event) {
             jQuery('.input-choise').text(jQuery('.input-choise').text() + "^[[B");
         }
         filterCommand(jQuery(".input-text").text().replace(/\u00A0/g, " "));
+    }else if(event.ctrlKey === true){
+        if(event.keyCode === 67){
+            // Ctrl+C
+            nowInput = null;
+            historyMode = false;
+            tabMode = false;
+            if(mode === "normal"){
+                outputHead(jQuery(".input-text").text()+"^C");
+            }else{
+                mode = "normal";
+                showInput();
+                hideChoise();
+                output(jQuery("#output-choise").html()+"<span class=\"printed-command\">"+jQuery(".input-choise").text()+"</span>"+"^C");
+            }
+            jQuery(".input-text").text("");
+            jQuery(".input-choice").text("");
+            jQuery("#tip").text("");
+        }
     }else{
         // Other keys
         nowInput = null;
         historyMode = false;
+        tabMode = false;
         filterHistory(jQuery(".input-text").text().replace(/\u00A0/g, " ").trim());
     }
 }
@@ -266,7 +308,7 @@ function hisComm(direction){
 
         // Out of range, show recent input
         if(historyCursor === -1){
-            jQuery(".input-text").text(nowInput);
+            jQuery(".input-text").text(nowInput.replace(/\u0020/g, "\u00A0"));
             keepLastIndex(document.getElementsByClassName("input-text")[0]);
             return nowInput;
         }
@@ -412,6 +454,25 @@ function doCommand(command){
                 outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["unknow_create"]];
                 status = false;
             }
+        }else if(commmandSequence[0] === "list"){
+            // list
+        }else if(commmandSequence[0] === "remove"){
+            // remove
+            if((commmandSequence.length > 2 && commmandSequence[commmandSequence.length - 1] !== "-f") || (commmandSequence.length > 3 && commmandSequence[2] === "-f")){
+                output('<span class="color-warn">'+phpContent["warning"]+':</span> '+phpContent["ignored"]);
+            }
+            if(commmandSequence.length < 2 || commmandSequence[1] === "-f"){
+                outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["remove"]["arg_needed"]];
+                status = false;
+            }else if(!(/^\d{1,3}$/.test(commmandSequence[1])) && commmandSequence[1] !== "-f"){
+                outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["remove"]["not_an_id"]];
+                status = false;
+            }else{
+                outputArg = ['<span class="color-success">'+phpContent["done"]+'.</span> '+phpContent["remove"]["success"]+'<div class="webhook-list">ID&nbsp;&nbsp;&nbsp;&nbsp;Source&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Secret<br>============================================================<br>'+commmandSequence[1]+'&nbsp;'.repeat(6 - commmandSequence[1].length)+'GitHub&nbsp;&nbsp;&nbsp;Verified&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hu7webfy5gf31b13yf3vhu898h139gh8<br>'+'============================================================<br>Total: '+'1'+'</div>', ''];
+                status = true;
+            }
+        }else if(commmandSequence[0] === "log"){
+            // log
         }else{
             // Unknown command, print an error
             outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["unknown_command"][0]+commmandSequence[0]+phpContent["unknown_command"][1]];
