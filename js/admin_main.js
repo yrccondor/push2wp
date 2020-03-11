@@ -73,12 +73,21 @@ function filterCommand(input){
     filteredCommand = [];
     filteredSuggestion = [];
     // Keep the last SPACE
-    if(input.substr(-1) === " "){
+    if(input.substr(-1) === " " || input.substr(-1) === "\u00A0"){
         input = input.split(/\|\||;|&&/).pop().trim() + " ";
     }else{
         input = input.split(/\|\||;|&&/).pop().trim();
     }
     let splitedInput = input.split(" ");
+    if(splitedInput[splitedInput.length - 1] === "" && input.trim() !== ""){
+        splitedInput.pop();
+    }
+    if(splitedInput[0] === "" && input.trim() !== ""){
+        splitedInput.shift();
+    }
+    if(input.trim() === ""){
+        splitedInput = [""];
+    }
     if(splitedInput.length === 1){
         for(item of commandList){
             if(item.indexOf(input) === 0){
@@ -271,11 +280,15 @@ function parseKey(event) {
             tabMode = false;
             if(mode === "normal"){
                 outputHead(jQuery(".input-text").text()+"^C");
+            }else if(mode === "creating"){
+                mode = "normal";
+                output("^C");
+                showInput();
             }else{
                 mode = "normal";
+                output(jQuery("#output-choise").html()+"<span class=\"printed-command\">"+jQuery(".input-choise").text()+"</span>"+"^C");
                 showInput();
                 hideChoise();
-                output(jQuery("#output-choise").html()+"<span class=\"printed-command\">"+jQuery(".input-choise").text()+"</span>"+"^C");
             }
             jQuery(".input-text").text("");
             jQuery(".input-choice").text("");
@@ -331,7 +344,7 @@ function doNextCommand(status){
     let nextLogic = commandQueue.shift();
     if(typeof nextLogic !== "number"){
         // Something went wrong, print an error and move to the next command
-        output('<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["command_error"]);
+        output('<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["command_error"]);
         let index = 0;
         let queueLength = commandQueue.length;
         for(command of commandQueue){
@@ -423,9 +436,9 @@ function doCommand(command){
         if(commmandSequence[0] === "help"){
             // help
             if(commmandSequence.length > 1){
-                output('<span class="color-warn">'+phpContent["warning"]+':</span> '+phpContent["ignored"]);
+                output('<span class="color-warn">'+phpContent["warning"]+'</span>'+phpContent["ignored"]);
             }
-            outputArg = ["Push2WP Verion "+phpContent["version"]+"<br>PTW Shell Verion "+shellVersion+"<br><br>&nbsp;&nbsp;<strong>create &lt;github/gitlab/coding&gt;</strong>: "+phpContent["help"]["create"]+"<br>&nbsp;&nbsp;<strong>list</strong>: "+phpContent["help"]["list"]+"<br>&nbsp;&nbsp;<strong>remove &lt;id&gt;</strong>: "+phpContent["help"]["remove"]+"<br>&nbsp;&nbsp;<strong>pause</strong>: "+phpContent["help"]["pause"]+"<br>&nbsp;&nbsp;<strong>log</strong>: "+phpContent["help"]["log"]+"<br>&nbsp;&nbsp;<strong>clear</strong>: "+phpContent["help"]["clear"]+"<br>&nbsp;&nbsp;<strong>help</strong>: "+phpContent["help"]["help"]+"<br>"];
+            outputArg = ["Push2WP Verion "+phpContent["version"]+"<br>PTW Shell Verion "+shellVersion+"<br><br>&nbsp;&nbsp;<strong>create &lt;github/gitlab/coding&gt;</strong>: "+phpContent["help"]["create"]+"<br>&nbsp;&nbsp;<strong>list</strong>: "+phpContent["help"]["list"]+"<br>&nbsp;&nbsp;<strong>remove &lt;ID&gt;</strong>: "+phpContent["help"]["remove"]+"<br>&nbsp;&nbsp;<strong>pause</strong>: "+phpContent["help"]["pause"]+"<br>&nbsp;&nbsp;<strong>log &lt;length=50&gt;</strong>: "+phpContent["help"]["log"]+"<br>&nbsp;&nbsp;<strong>clear</strong>: "+phpContent["help"]["clear"]+"<br>&nbsp;&nbsp;<strong>help</strong>: "+phpContent["help"]["help"]+"<br>"];
             status = true;
         }else if(commmandSequence[0] === "clear"){
             // clear
@@ -435,7 +448,7 @@ function doCommand(command){
         }else if(commmandSequence[0] === "create"){
             // create
             if(commmandSequence.length > 2){
-                output('<span class="color-warn">'+phpContent["warning"]+':</span> '+phpContent["ignored"]);
+                output('<span class="color-warn">'+phpContent["warning"]+'</span>'+phpContent["ignored"]);
             }
             if(commmandSequence[1] === "github" || commmandSequence[1] === "gitlab" || commmandSequence[1] === "coding"){
                 let source = "";
@@ -447,11 +460,12 @@ function doCommand(command){
                     source = "Coding";
                 }
                 hideInput();
-                createHook(commmandSequence[1]);
-                outputArg = ['<span class="color-info">Target: '+source+'</span><br>Hold on a second...'];
+                outputArg = ['<span class="color-info">'+phpContent["create"]["source"]+source+'</span><br>'+phpContent["create"]["hold_on"]];
+                createHook(commmandSequence[1], source);
+                mode = "creating";
                 status = true;
             }else{
-                outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["unknow_create"]];
+                outputArg = ['<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["unknow_create"]];
                 status = false;
             }
         }else if(commmandSequence[0] === "list"){
@@ -459,23 +473,45 @@ function doCommand(command){
         }else if(commmandSequence[0] === "remove"){
             // remove
             if((commmandSequence.length > 2 && commmandSequence[commmandSequence.length - 1] !== "-f") || (commmandSequence.length > 3 && commmandSequence[2] === "-f")){
-                output('<span class="color-warn">'+phpContent["warning"]+':</span> '+phpContent["ignored"]);
+                output('<span class="color-warn">'+phpContent["warning"]+'</span>'+phpContent["ignored"]);
             }
             if(commmandSequence.length < 2 || commmandSequence[1] === "-f"){
-                outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["remove"]["arg_needed"]];
+                outputArg = ['<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["remove"]["arg_needed"]];
                 status = false;
-            }else if(!(/^\d{1,3}$/.test(commmandSequence[1])) && commmandSequence[1] !== "-f"){
-                outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["remove"]["not_an_id"]];
+            }else if(!(/^[1-9]\d{0,2}$/.test(commmandSequence[1])) && commmandSequence[1] !== "-f"){
+                outputArg = ['<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["remove"]["not_an_id"]];
                 status = false;
             }else{
-                outputArg = ['<span class="color-success">'+phpContent["done"]+'.</span> '+phpContent["remove"]["success"]+'<div class="webhook-list">ID&nbsp;&nbsp;&nbsp;&nbsp;Source&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Secret<br>============================================================<br>'+commmandSequence[1]+'&nbsp;'.repeat(6 - commmandSequence[1].length)+'GitHub&nbsp;&nbsp;&nbsp;Verified&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hu7webfy5gf31b13yf3vhu898h139gh8<br>'+'============================================================<br>Total: '+'1'+'</div>', ''];
+                outputArg = ['<span class="color-success">'+phpContent["done"]+'</span>'+phpContent["remove"]["success"]+'<div class="webhook-list">ID&nbsp;&nbsp;&nbsp;&nbsp;Source&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Secret<br>==================================================================================<br>'+commmandSequence[1]+'&nbsp;'.repeat(6 - commmandSequence[1].length)+'GitHub&nbsp;&nbsp;&nbsp;Verified&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2020-03-10 21:59:45&nbsp;&nbsp;&nbsp;hu7webfy5gf31b13yf3vhu898h139gh8<br>'+'==================================================================================<br>'+phpContent["total"]+'1'+'</div>', ''];
                 status = true;
             }
         }else if(commmandSequence[0] === "log"){
             // log
+            if(commmandSequence.length > 2){
+                output('<span class="color-warn">'+phpContent["warning"]+'</span>'+phpContent["ignored"]);
+            }
+            if(commmandSequence.length > 1){
+                // If length is specified
+                if(!(/^[1-5]\d{0,1}$/.test(commmandSequence[1])) || parseInt(commmandSequence[1]) > 50){
+                    outputArg = ['<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["log_error"]];
+                    status = false;
+                }else{
+                    outputArg = ["\u200B", ""];
+                    mode = "creating";
+                    status = true;
+                    hideInput();
+                    getLog(parseInt(commmandSequence[1]));
+                }
+            }else{
+                outputArg = ["\u200B", ""];
+                mode = "creating";
+                status = true;
+                hideInput();
+                getLog();
+            }
         }else{
             // Unknown command, print an error
-            outputArg = ['<span class="color-err">'+phpContent["error"]+':</span> '+phpContent["unknown_command"][0]+commmandSequence[0]+phpContent["unknown_command"][1]];
+            outputArg = ['<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["unknown_command"][0]+commmandSequence[0]+phpContent["unknown_command"][1]];
 
             // Guess the command accroding to the edit distance
             guessCommand = "";
@@ -527,6 +563,11 @@ function hideInput(){
  */
 function showInput(){
     jQuery("#input").show();
+
+    // Keep the scroll bar in the end
+    jQuery('body,html').animate({
+        scrollTop: jQuery(document).height()
+    }, 0);
     jQuery(".input-text").focus();
 }
 
@@ -542,6 +583,11 @@ function hideChoise(){
  */
 function showChoise(){
     jQuery("#output-choise").css("display", "inline");
+
+    // Keep the scroll bar in the end
+    jQuery('body,html').animate({
+        scrollTop: jQuery(document).height()
+    }, 0);
     jQuery(".input-choise").css("display", "inline").focus();
 }
 
@@ -650,13 +696,87 @@ function getCursorPosition(element){
     return caretOffset;
 }
 
+// Format strings like PHP do
+String.prototype.format= function(){
+    let args = Array.prototype.slice.call(arguments);
+    let count = 0;
+    return this.replace(/%s/g,function(s,i){
+        return args[count++];
+    });
+}
+
 /**
  * Create a webhook
  * 
  * @param {string} source the source. "github", "gitlab" or "coding" only
- * @return {boolean} whether the webhook was created successfully
+ * @param {string} name the formated name of the source
  */
-function createHook(source){
-    showInput();
-    return [source];
+function createHook(source, name){
+    jQuery.get(phpContent["admin_url"]+"?action=ptw_create&source="+source, function(result){
+        if(result.status){
+            if(mode === "creating"){
+                // If not canceled
+                output(phpContent["create"]["url_is"]+"<span class=\"color-info\">"+phpContent["admin_url"]+"?action=ptw_"+result.data.source+"&id="+result.data.id.toString()+"</span>");
+                output(phpContent["create"]["secret_is"]+"<span class=\"color-info\">"+result.data.secret+"</span>");
+                output(phpContent["create"]["donot_show"].format(name));
+                output(phpContent["create"]["add"].format(name));
+                output(phpContent["create"]["ping"].format(name, result.data.id.toString()));
+                showInput();
+                mode = "normal";
+                doNextCommand(true);
+            }else{
+                // Canceled, remove it
+                jQuery.get(phpContent["admin_url"]+"?action=ptw_remove&id="+result.data.id.toString());
+            }
+        }else{
+            if(mode === "creating"){
+                output('<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["no_permission"]);
+                mode = "normal";
+                showInput();
+                doNextCommand(false);
+            }
+        }
+    }).error(function(){
+        // Something went wrong
+        if(mode === "creating"){
+            output('<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["unknown_error"]);
+            mode = "normal";
+            showInput();
+            doNextCommand(false);
+        }
+    });
+}
+
+/**
+ * Get logs through API
+ * 
+ * @param {string} length the length of the log. Default is 50
+ */
+function getLog(length=50){
+    jQuery.get(phpContent["admin_url"]+"?action=ptw_log&length="+length.toString(), function(result){
+        if(result.status){
+            if(mode === "creating"){
+                // If not canceled
+                output("<div class=\"webhook-list\""+result.data+"</div>", "");
+                showInput();
+                mode = "normal";
+                doNextCommand(true);
+            }
+        }else{
+            if(mode === "creating"){
+                output('<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["no_permission"]);
+                mode = "normal";
+                showInput();
+                doNextCommand(false);
+            }
+        }
+    }).error(function(){
+        if(mode === "creating"){
+            // Something went wrong
+            output('<span class="color-err">'+phpContent["error"]+'</span>'+phpContent["unknown_error"]);
+            mode = "normal";
+            showInput();
+            doNextCommand(false);
+        }
+    });
 }

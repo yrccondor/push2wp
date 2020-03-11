@@ -103,7 +103,7 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 /*----- .warp -----*/
 .wrap {
     color: rgb(212, 212, 212);
-    font-family: 'Courier Prime',Courier New,Consolas, monospace!important;
+    font-family: 'Courier Prime',Courier New,Consolas, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", monospace!important;
     font-size: 16px;
     line-height: 25px;
     margin-top: 20px;
@@ -140,9 +140,10 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 .input-text, .input-text * {
     background-color: transparent!important;
     font-size: 16px!important;
-    font-family: 'Courier Prime',Courier New,Consolas,monospace!important;
+    font-family: 'Courier Prime',Courier New,Consolas, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", monospace!important;
     word-break: break-all!important;
     color: rgb(212, 212, 212)!important;
+    font-weight: normal!important;
 }
 .input-text br {
     display: none!important;
@@ -151,6 +152,8 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
     white-space: pre;
     width: 100%;
     overflow: auto;
+    display: inline-block;
+    margin-bottom: -9px;
 }
 /*----- output -----*/
 .color-err {
@@ -167,7 +170,7 @@ ul#adminmenu a.wp-has-current-submenu:after, ul#adminmenu>li.current>a.current:a
 }
 .color-success {
     font-weight: bold;
-    color: chartreuse;
+    color: #79ce24;
 }
 .printed-command {
     padding-left: 10px;
